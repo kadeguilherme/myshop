@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:shop/providers/product.dart';
 
+import 'product.dart';
+
 class CartItem {
   final String id;
   final String productId;
@@ -59,6 +61,24 @@ class Cart with ChangeNotifier {
             quantity: 1,
             title: product.title),
       );
+    }
+    notifyListeners();
+  }
+
+  void removeSingleItem(productId) {
+    if (!_items.containsKey(productId)) return;
+
+    if (_items[productId].quantity == 1) {
+      _items.remove(productId);
+    } else {
+      _items.update(
+          productId,
+          (existingItem) => CartItem(
+              id: existingItem.id,
+              productId: existingItem.productId,
+              price: existingItem.price,
+              quantity: existingItem.quantity - 1,
+              title: existingItem.title));
     }
     notifyListeners();
   }
