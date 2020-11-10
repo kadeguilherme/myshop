@@ -3,6 +3,7 @@ import 'package:shop/providers/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/widgets/product_item.dart';
 import '../widgets/app_drawer.dart';
+import '../utils/app_routes.dart';
 
 class ProductsScreen extends StatelessWidget {
   @override
@@ -13,7 +14,11 @@ class ProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Gerenciar Produtos'),
         actions: <Widget>[
-          IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+          IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.PRODUCTS_FORM);
+              }),
         ],
       ),
       drawer: AppDrawer(),
