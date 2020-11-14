@@ -25,7 +25,20 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
   }
 
   void _updateImage() {
-    setState(() {});
+    if (isValidImage(_imageUrlController.text)) {
+      setState(() {});
+    }
+  }
+
+  bool isValidImage(String url) {
+    bool isValidProtocol = url.toLowerCase().startsWith('https://') ||
+        url.toLowerCase().startsWith('http://');
+
+    bool endsWihtPng = url.toLowerCase().endsWith('.png') ||
+        url.toLowerCase().endsWith('.jpg') ||
+        url.toLowerCase().endsWith('.jpeg');
+
+    return (isValidProtocol && endsWihtPng);
   }
 
   void _saveForm() {
@@ -100,6 +113,17 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
                 onSaved: (value) => _formData['price'] = double.parse(value),
+                validator: (value) {
+                  bool vazio = value.trim().isEmpty;
+                  var newPrice = double.parse(value);
+
+                  bool valido = newPrice == 0 || newPrice <= 0;
+
+                  if (vazio || valido) {
+                    return 'Informe um preço valido';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Descrição'),
@@ -118,6 +142,14 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                       textInputAction: TextInputAction.none,
                       controller: _imageUrlController,
                       focusNode: _imageUrlFocusNode,
+                      validator: (value) {
+                        bool vazia = value.trim().isEmpty;
+                        bool invalida = !isValidImage(value);
+                        if (vazia || invalida) {
+                          return 'Informe uma Url válida';
+                        }
+                        ;
+                      },
                       onFieldSubmitted: (_) {
                         _saveForm();
                       },
