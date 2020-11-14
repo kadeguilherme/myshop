@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../data/dummy_data.dart';
 import 'product.dart';
@@ -12,5 +13,16 @@ class Products with ChangeNotifier {
 
   List<Product> get favoriteItems {
     return _items.where((prod) => prod.isFavorite).toList();
+  }
+
+  void addProduct(Product newProduct) {
+    _items.add(Product(
+      id: Random().nextDouble().toString(),
+      title: newProduct.title,
+      price: newProduct.price,
+      description: newProduct.description,
+      imageUrl: newProduct.imageUrl,
+    ));
+    notifyListeners();
   }
 }
