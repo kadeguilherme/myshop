@@ -29,6 +29,12 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
   }
 
   void _saveForm() {
+    var _isValid = _form.currentState.validate();
+
+    if (!_isValid) {
+      return;
+    }
+
     _form.currentState.save();
     final newProduct = Product(
       id: Random().nextDouble().toString(),
@@ -76,6 +82,12 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
                 onSaved: (value) => _formData['titulo'] = value,
+                validator: (value) {
+                  if (value.trim().isEmpty) {
+                    return 'Informe um titulo valido!!';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Preço'),
