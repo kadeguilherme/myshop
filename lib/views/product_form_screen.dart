@@ -24,6 +24,22 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
     _imageUrlFocusNode.addListener(_updateImage);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final product = ModalRoute.of(context).settings.arguments as Product;
+      _formData['id'] = product.id;
+      _formData['title'] = product.title;
+      _formData['description'] = product.description;
+      _formData['price'] = product.price;
+      _formData['imageUrl'] = product.imageUrl;
+
+      _imageUrlController.text = _formData['imageUrl'];
+    }
+  }
+
   void _updateImage() {
     if (isValidImage(_imageUrlController.text)) {
       setState(() {});
@@ -49,13 +65,21 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
     }
 
     _form.currentState.save();
-    final newProduct = Product(
+
+    final product = Product(
+      id: _formData['id'],
       title: _formData['title'],
-      description: _formData['descricao'],
+      description: _formData['description'],
       price: _formData['price'],
       imageUrl: _formData['imageUrl'],
     );
-    Provider.of<Products>(context, listen: false).addProduct(newProduct);
+
+    final products = Provider.of<Products>(context, listen: false);
+    if (_formData['id'] == null) {
+      products.addProduct(product);
+    } else {
+      products.updateProduct(product);
+    }
     Navigator.of(context).pop();
   }
 
@@ -88,6 +112,7 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData['title'],
                 decoration: InputDecoration(labelText: 'Titulo'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -102,6 +127,7 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                 },
               ),
               TextFormField(
+                initialValue: _formData['price'].toString(),
                 decoration: InputDecoration(labelText: 'Preço'),
                 keyboardType: TextInputType.numberWithOptions(
                   decimal: true,
@@ -125,11 +151,12 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                 },
               ),
               TextFormField(
+                initialValue: _formData['description'],
                 decoration: InputDecoration(labelText: 'Descrição'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
-                onSaved: (value) => _formData['descricao'] = value,
+                onSaved: (value) => _formData['description'] = value,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -147,7 +174,7 @@ class _ProductFormScreenState extends State<ProductFormScreenState> {
                         if (vazia || invalida) {
                           return 'Informe uma Url válida';
                         }
-                        ;
+                        return null;
                       },
                       onFieldSubmitted: (_) {
                         _saveForm();
