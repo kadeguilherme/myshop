@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
   final Widget child;
-  final String valor;
+  final String value;
   final Color color;
 
   Badge({
     @required this.child,
-    @required this.valor,
+    @required this.value,
     this.color,
   });
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -30,9 +31,11 @@ class Badge extends StatelessWidget {
               minWidth: 16,
             ),
             child: Text(
-              valor,
+              value,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 10,
+              ),
             ),
           ),
         )

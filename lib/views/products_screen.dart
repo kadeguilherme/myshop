@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shop/providers/products.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/widgets/product_item.dart';
+
 import '../widgets/app_drawer.dart';
+import '../providers/products.dart';
+import '../widgets/product_item.dart';
 import '../utils/app_routes.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -15,10 +16,13 @@ class ProductsScreen extends StatelessWidget {
         title: Text('Gerenciar Produtos'),
         actions: <Widget>[
           IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.PRODUCTS_FORM);
-              }),
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                AppRoutes.PRODUCT_FORM,
+              );
+            },
+          ),
         ],
       ),
       drawer: AppDrawer(),
@@ -27,7 +31,7 @@ class ProductsScreen extends StatelessWidget {
         child: ListView.builder(
           itemCount: productsData.itemsCount,
           itemBuilder: (ctx, i) => Column(
-            children: [
+            children: <Widget>[
               ProductItem(products[i]),
               Divider(),
             ],

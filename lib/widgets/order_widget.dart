@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shop/providers/orders.dart';
+
+import '../providers/orders.dart';
 
 class OrderWidget extends StatefulWidget {
   final Order order;
@@ -19,7 +22,7 @@ class _OrderWidgetState extends State<OrderWidget> {
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
-        children: [
+        children: <Widget>[
           ListTile(
             title: Text('R\$ ${widget.order.total.toStringAsFixed(2)}'),
             subtitle: Text(
@@ -40,12 +43,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                 horizontal: 15,
                 vertical: 4,
               ),
-              height: (widget.order.products.length * 25.0) + 20,
+              height: (widget.order.products.length * 25.0) + 10,
               child: ListView(
                 children: widget.order.products.map((product) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       Text(
                         product.title,
                         style: TextStyle(
@@ -54,7 +57,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         ),
                       ),
                       Text(
-                        '${product.quantity}x R\$ ${product.price}',
+                        '${product.quantity} x R\$ ${product.price}',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey,
@@ -64,7 +67,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                   );
                 }).toList(),
               ),
-            )
+            ),
         ],
       ),
     );

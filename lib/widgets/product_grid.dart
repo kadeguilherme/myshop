@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/products.dart';
-import 'package:shop/widgets/product_grid_item.dart';
+
+import '../widgets/product_grid_item.dart';
+import '../providers/products.dart';
 
 class ProductGrid extends StatelessWidget {
   final bool showFavoriteOnly;
@@ -14,6 +15,7 @@ class ProductGrid extends StatelessWidget {
     final products = showFavoriteOnly
         ? productsProvider.favoriteItems
         : productsProvider.items;
+
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: products.length,
@@ -22,9 +24,7 @@ class ProductGrid extends StatelessWidget {
         child: ProductGridItem(),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //quantidade de item na tela
         crossAxisCount: 2,
-        //tamanho de cada item na tela
         childAspectRatio: 3 / 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,

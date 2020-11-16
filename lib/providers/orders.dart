@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-import 'package:shop/providers/cart.dart';
+import 'package:flutter/material.dart';
+
+import './cart.dart';
 
 class Order {
   final String id;
@@ -35,7 +36,7 @@ class Orders with ChangeNotifier {
         id: Random().nextDouble().toString(),
         total: cart.totalAmount,
         date: DateTime.now(),
-        products: cart.item.values.toList(),
+        products: cart.items.values.toList(),
       ),
     );
 

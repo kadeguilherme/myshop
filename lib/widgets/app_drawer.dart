@@ -6,9 +6,9 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        children: [
+        children: <Widget>[
           AppBar(
-            title: Text('Bem Vindo Usuario !'),
+            title: Text('Bem vindo Usuário!'),
             automaticallyImplyLeading: false,
           ),
           Divider(),
@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
                 AppRoutes.PRODUCTS,
               );
             },
-          )
+          ),
         ],
       ),
     );
