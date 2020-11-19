@@ -29,8 +29,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     if (_formData.isEmpty) {
       final product = ModalRoute.of(context).settings.arguments as Product;
-      
-      if(product != null) {
+
+      if (product != null) {
         _formData['id'] = product.id;
         _formData['title'] = product.title;
         _formData['description'] = product.description;
@@ -87,7 +87,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     );
 
     final products = Provider.of<Products>(context, listen: false);
-    if(_formData['id'] == null) {
+    if (_formData['id'] == null) {
       products.addProduct(product);
     } else {
       products.updateProduct(product);
@@ -218,11 +218,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     alignment: Alignment.center,
                     child: _imageUrlController.text.isEmpty
                         ? Text('Informe a URL')
-                        : FittedBox(
-                            child: Image.network(
-                              _imageUrlController.text,
-                              fit: BoxFit.cover,
-                            ),
+                        : Image.network(
+                            _imageUrlController.text,
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ],
