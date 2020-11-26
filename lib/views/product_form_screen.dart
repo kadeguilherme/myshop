@@ -70,7 +70,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.dispose();
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     var isValid = _form.currentState.validate();
 
     if (!isValid) {
@@ -97,19 +97,26 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         _isLoading = false;
       });
 
-      products.addProduct(product).catchError((error) {
-        return showDialog<Null>(
+      try {
+        await products.addProduct(product);
+        Navigator.of(context).pop();
+      } catch (error) {
+        showDialog<Null>(
             context: context,
             builder: (ctx) => AlertDialog(
                   title: Text("Ocorreu um erro!"),
-                  content: Text(error.toString()),
+                  content: Text("Ocorreu um erro para salvar o produto"),
                   actions: <Widget>[
                     FlatButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: Text('Oky')),
+                        child: Text('Fechar')),
                   ],
                 ));
-      }).then((_) => Navigator.of(context).pop());
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } else {
       products.updateProduct(product);
       Navigator.of(context).pop();
