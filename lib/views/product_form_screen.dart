@@ -97,7 +97,19 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         _isLoading = false;
       });
 
-      products.addProduct(product).then((_) => Navigator.of(context).pop());
+      products.addProduct(product).catchError((error) {
+        return showDialog<Null>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text("Ocorreu um erro!"),
+                  content: Text(error.toString()),
+                  actions: <Widget>[
+                    FlatButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text('Oky')),
+                  ],
+                ));
+      }).then((_) => Navigator.of(context).pop());
     } else {
       products.updateProduct(product);
       Navigator.of(context).pop();
