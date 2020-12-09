@@ -7,8 +7,7 @@ import './product.dart';
 class Products with ChangeNotifier {
   List<Product> _items = [];
 
-  final String _url =
-      'https://flutter-coder-6fc75.firebaseio.com/products.json';
+  final String _baseUrl = 'https://flutter-coder-6fc75.firebaseio.com/products';
 
   List<Product> get items => [..._items];
 
@@ -21,7 +20,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> loadProduct() async {
-    final response = await http.get(_url);
+    final response = await http.get("$_baseUrl.json");
     Map<String, dynamic> data = json.decode(response.body);
 
     _items.clear();
@@ -45,7 +44,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product newProduct) async {
     final response = await http.post(
-      _url,
+      "$_baseUrl.json",
       body: json.encode({
         'title': newProduct.title,
         'description': newProduct.description,
@@ -64,23 +63,39 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     if (product == null || product.id == null) {
       return;
     }
 
     final index = _items.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
+      await http.patch(
+        "$_baseUrl/${product.id}.json",
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+        }),
+      );
       _items[index] = product;
       notifyListeners();
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((prod) => prod.id == id);
     if (index >= 0) {
-      _items.removeWhere((prod) => prod.id == id);
+      final product = _items[index];
+      _items.remove(product);
       notifyListeners();
+      final response = await http.delete("$_baseUrl/${product.id}.json");
+
+      if (response.statusCode >= 400) {
+        _items.insert(index, product);
+        notifyListeners();
+      }
     }
   }
 }
